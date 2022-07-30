@@ -1,20 +1,19 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import SignUp from "./pages/SignUp/SignUp";
-import Login from "./pages/Login/Login";
-import TodoList from "./pages/TodoList/TodoList";
+import SignUp from "./pages/auth/SignUp";
+import Login from "./pages/auth/Login";
+import TodoList from "./pages/todolist/TodoList";
 
-function Router() {
+function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path="/" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/auth/signup" element={<SignUp />} />
+        <Route path="/auth/login" element={<Login />} />
         <Route path="/todoList" element={<TodoList />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
-export default Router;
+export default App;

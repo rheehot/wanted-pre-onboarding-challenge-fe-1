@@ -44,7 +44,7 @@ const colors = {
   black: "#222222",
   darkGray: "#4D4D4D",
   gray: "#8E8E8E",
-  lightGray: "#f4f4f4",
+  lightGray: "#FAFAFA",
   disabled: "#ebebeb",
   white: "#ffffff",
   purple: "#342461",
