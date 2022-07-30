@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import React, { useState } from "react";
+import axios from "axios";
 
 function Signup() {
   const navigate = useNavigate();
 
   const [userInputs, setUserInputs] = useState({
     email: "",
-    pw: "",
+    password: "",
   });
-  const { email, pw } = userInputs;
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -19,11 +19,22 @@ function Signup() {
     });
   };
 
+  const { email, password } = userInputs;
   const isInputCheck =
-    email.includes("@") && email.includes(".") && pw.length >= 8;
+    email.includes("@") && email.includes(".") && password.length >= 8;
 
-  const goLogin = () => {
-    navigate("/auth/login");
+  const goSignUp = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:8080/users/create", {
+        email,
+        password,
+      });
+      alert(res.data.message);
+      navigate("/auth/login");
+    } catch {
+      alert("회원가입 실패");
+    }
   };
 
   return (
@@ -34,15 +45,15 @@ function Signup() {
           onChange={handleInput}
           type="text"
           name="email"
-          placeholder="이메일"
+          placeholder="아이디(E-mail)을 입력해 주세요"
         />
         <SignUpPw
           onChange={handleInput}
           type="password"
-          name="pw"
-          placeholder="비밀번호"
+          name="password"
+          placeholder="비밀번호를 입력해 주세요"
         />
-        <SignUpBtn disabled={!isInputCheck} onClick={goLogin}>
+        <SignUpBtn disabled={!isInputCheck} onClick={goSignUp}>
           회원가입하기
         </SignUpBtn>
       </SignUpBox>
