@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 function Signup() {
@@ -23,8 +23,7 @@ function Signup() {
   const isInputCheck =
     email.includes("@") && email.includes(".") && password.length >= 8;
 
-  const goSignUp = async (e) => {
-    e.preventDefault();
+  const goSignUp = async () => {
     try {
       const res = await axios.post("http://localhost:8080/users/create", {
         email,
@@ -32,8 +31,8 @@ function Signup() {
       });
       alert(res.data.message);
       navigate("/auth/login");
-    } catch {
-      alert("회원가입 실패");
+    } catch (error) {
+      alert(error);
     }
   };
 

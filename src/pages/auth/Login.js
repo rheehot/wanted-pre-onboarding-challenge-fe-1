@@ -1,20 +1,61 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 
 function Login() {
   const navigate = useNavigate();
 
-  const gotodoList = () => {
-    navigate("/todolist");
+  const [userInputs, setUserInputs] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setUserInputs({
+      ...userInputs,
+      [name]: value,
+    });
+  };
+
+  const { email, password } = userInputs;
+  const isInputCheck =
+    email.includes("@") && email.includes(".") && password.length >= 8;
+
+  const goSignUp = async () => {
+    try {
+      const res = await axios.post("http://localhost:8080/users/login", {
+        email,
+        password,
+      });
+      alert(res.data.message);
+      localStorage.setItem("token", res.data.token);
+      navigate("/todolist");
+    } catch (error) {
+      alert(error);
+    }
   };
 
   return (
     <Container>
       <SignUpBox>
         <Title>로그인</Title>
-        <SignUpEmail type="text" name="email" placeholder="이메일" />
-        <SignUpPw type="password" name="pw" placeholder="비밀번호" />
-        <SignUpBtn onClick={gotodoList}>로그인하기</SignUpBtn>
+        <SignUpEmail
+          onChange={handleInput}
+          type="text"
+          name="email"
+          placeholder="이메일"
+        />
+        <SignUpPw
+          onChange={handleInput}
+          type="password"
+          name="password"
+          placeholder="비밀번호"
+        />
+        <SignUpBtn onClick={goSignUp} disabled={!isInputCheck}>
+          로그인하기
+        </SignUpBtn>
       </SignUpBox>
     </Container>
   );
