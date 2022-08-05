@@ -2,17 +2,14 @@ import styled from "styled-components";
 import axios from "axios";
 import { useState } from "react";
 
+import TodoListTitles from "./TodoListTitles";
+
 function Todolist() {
   const [boxToggle, setBoxToggle] = useState(false);
   const [todoInputs, setTodoInputs] = useState({
-    id: "",
     title: "",
     content: "",
   });
-
-  const onBox = () => {
-    setBoxToggle(true);
-  };
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -24,11 +21,31 @@ function Todolist() {
 
   const offBox = () => {
     setTodoInputs({
-      id: "",
       title: "",
       content: "",
     });
     setBoxToggle(false);
+  };
+
+  const createTodo = async () => {
+    const { title, content } = todoInputs;
+    if (boxToggle) {
+      try {
+        await axios.post(
+          "http://localhost:8080/todos",
+          {
+            title,
+            content,
+          },
+          { headers: { Authorization: localStorage.getItem("token") } }
+        );
+        alert("작성완료");
+      } catch (error) {
+        alert(error);
+      }
+    } else {
+      setBoxToggle(true);
+    }
   };
 
   return (
@@ -54,12 +71,13 @@ function Todolist() {
           />
         </InputBox>
         <BtnBox>
-          <SignUpBtn onClick={onBox}>작성하기</SignUpBtn>
+          <SignUpBtn onClick={createTodo}>작성하기</SignUpBtn>
           <SignUpBtn onClick={offBox} isVaild={boxToggle}>
             취소
           </SignUpBtn>
         </BtnBox>
       </TodoListBox>
+      <TodoListTitles />
     </Container>
   );
 }
@@ -71,6 +89,7 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   background-color: ${(props) => props.theme.colors.lightGray};
+  ${(props) => props.theme.flex.flexBox("column")}
 `;
 
 const TodoListBox = styled.div`
